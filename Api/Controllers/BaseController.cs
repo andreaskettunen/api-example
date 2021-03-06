@@ -9,11 +9,11 @@ namespace Api.Controllers
 {
     public class BaseController : ControllerBase
     {
-        protected IMediator Mediator { get; }
+        private readonly IMediator _mediator;
 
         public BaseController(IMediator mediator)
         {
-            Mediator = mediator;
+            _mediator = mediator;
         }
         
         protected async Task<IActionResult> HandleRequestAsync<TRequest, TResponse>(TRequest request)
@@ -27,7 +27,7 @@ namespace Api.Controllers
 
             try
             {
-                var response = await Mediator.Send(request);
+                var response = await _mediator.Send(request);
 
                 if (response is null)
                 {

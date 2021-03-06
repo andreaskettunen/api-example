@@ -13,9 +13,9 @@ namespace Api.Controllers
         { }
         
         [HttpPost]
-        public async Task<IActionResult> Post(PingRequest request)
+        public async Task<IActionResult> Post(PingHandler.PingRequest request)
         {
-            return await HandleRequestAsync<PingRequest, PingResponse>(request);
+            return await HandleRequestAsync<PingHandler.PingRequest, PingHandler.PingResponse>(request);
         }
     }
 }

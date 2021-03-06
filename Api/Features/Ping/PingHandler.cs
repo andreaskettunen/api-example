@@ -1,10 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 
 namespace Api.Features.Ping
 {
-    public class PingHandler : IRequestHandler<PingRequest, PingResponse>
+    public class PingHandler : IRequestHandler<PingHandler.PingRequest, PingHandler.PingResponse>
     {
         private MySettings _mySettings;
 
@@ -15,10 +16,18 @@ namespace Api.Features.Ping
         
         public Task<PingResponse> Handle(PingRequest request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(new PingResponse
+            return Task.FromResult(new PingResponse("pong"));
+        }
+
+        public record PingRequest(int ToValidate) : IRequest<PingResponse>;
+        public record PingResponse(string Ping);
+        
+        public class PingValidator : AbstractValidator<PingRequest>
+        {
+            public PingValidator()
             {
-                Ping = "pong"
-            });
+                RuleFor(r => r.ToValidate).NotEmpty();
+            }
         }
     }
 }
