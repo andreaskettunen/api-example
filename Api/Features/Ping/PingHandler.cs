@@ -16,18 +16,29 @@ namespace Api.Features.Ping
         
         public Task<PingResponse> Handle(PingRequest request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(new PingResponse("pong"));
+            return Task.FromResult(
+                new PingResponse
+                {
+                    Ping = "pong"
+                });
         }
 
-        public record PingRequest(int ToValidate) : IRequest<PingResponse>;
-        public record PingResponse(string Ping);
-        
-        public class PingValidator : AbstractValidator<PingRequest>
+        public record PingRequest() : IRequest<PingResponse>
         {
-            public PingValidator()
-            {
-                RuleFor(r => r.ToValidate).NotEmpty();
-            }
+            public int ToValidate { get; init; }
+        }
+
+        public record PingResponse()
+        {
+            public string Ping { get; init; }
+        }
+    }
+    
+    public class PingValidator : AbstractValidator<PingHandler.PingRequest>
+    {
+        public PingValidator()
+        {
+            RuleFor(r => r.ToValidate).NotEmpty();
         }
     }
 }
